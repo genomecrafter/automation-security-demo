@@ -8,10 +8,28 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-      - uses: anothrNick/github-tag-action@v1
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Get version from version.py
+        id: get_version
+        run: |
+          VERSION=$(grep "__version__" version.py | cut -d "'" -f2)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "::set-output name=tag::$VERSION"
+
+      - name: Create Release Tag
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BUMP: patch
+        with:
+          tag_name: v${{ steps.get_version.outputs.tag }}
+          release_name: Release v${{ steps.get_version.outputs.tag }}
+          draft: false
+          prerelease: false
