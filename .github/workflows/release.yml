@@ -22,7 +22,7 @@ jobs:
         run: |
           VERSION=$(grep "__version__" version.py | cut -d "'" -f2)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "::set-output name=tag::$VERSION"
+          echo "tag=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Create Release Tag
         uses: actions/create-release@v1
