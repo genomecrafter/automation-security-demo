@@ -1,3 +1,3 @@
-﻿pytest
+pytest
 #Add vulnerable flask version
-flask==2.2.5
+flask==3.1.3
